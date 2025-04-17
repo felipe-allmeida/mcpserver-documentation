@@ -1,0 +1,32 @@
+{
+  "patternName": "MemoryManagement",
+  "description": "Verifica o uso adequado de recursos e gerenciamento de memória",
+  "severity": "Warning",
+  "rules": [
+    {
+      "type": "ResourceUsage",
+      "name": "DisposableNotDisposed",
+      "pattern": "new (SqlConnection|FileStream|StreamReader|StreamWriter|MemoryStream).*[^using]",
+      "message": "Recursos IDisposable devem ser adequadamente descartados com 'using' ou chamada explícita a Dispose()",
+      "suggestion": "Utilize o padrão 'using' para garantir que recursos sejam liberados corretamente"
+    },
+    {
+      "type": "ResourceUsage",
+      "name": "LargeObjectAllocation",
+      "pattern": "new (byte|char)\\[[0-9]{7,}\\]",
+      "message": "Alocação de objetos grandes pode causar pressão no garbage collector e fragmentação de memória",
+      "suggestion": "Considere utilizar pools de objetos ou streams para manipular grandes volumes de dados"
+    },
+    {
+      "type": "ResourceUsage",
+      "name": "StaticCollection",
+      "pattern": "static[^;]*List<|static[^;]*Dictionary<|static[^;]*Collection<",
+      "message": "Coleções estáticas que crescem continuamente podem causar vazamentos de memória",
+      "suggestion": "Considere utilizar cache com expiração ou limitar o tamanho das coleções estáticas"
+    }
+  ],
+  "codeExamples": {
+    "good": "// Bom: Uso do padrão using\nusing (var connection = new SqlConnection(connectionString))\n{\n    // operações com connection\n}\n\n// Bom: Reutilização de buffers\nprivate readonly byte[] _buffer = new byte[8192];\npublic void ProcessData(Stream stream)\n{\n    int bytesRead;\n    while ((bytesRead = stream.Read(_buffer, 0, _buffer.Length)) > 0)\n    {\n        // processa dados no buffer\n    }\n}",
+    "bad": "// Ruim: Recursos não liberados adequadamente\nvar connection = new SqlConnection(connectionString);\nconnection.Open();\n// operações com connection\n// connection.Dispose() esquecido\n\n// Ruim: Alocação repetida de buffers grandes\npublic void ProcessData(Stream stream)\n{\n    byte[] buffer = new byte[8192];\n    // uso do buffer\n}"
+  }
+}

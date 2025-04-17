@@ -1,0 +1,46 @@
+{
+  "patternName": "MVCPattern",
+  "description": "Model-View-Controller architectural pattern",
+  "severity": "Warning",
+  "rules": [
+    {
+      "type": "Structure",
+      "expectedPattern": "Controllers should only interact with Models and Views",
+      "identifiers": {
+        "controller": ".*Controller$",
+        "model": ".*Model$|.*Entity$|.*Repository$",
+        "view": ".*View$|.*Page$|.*Component$"
+      },
+      "message": "Controllers should only interact with Models and Views"
+    },
+    {
+      "type": "Naming",
+      "pattern": {
+        "controller": "^[A-Z][a-zA-Z0-9]*Controller$",
+        "model": "^[A-Z][a-zA-Z0-9]*(Model|Entity)$",
+        "view": "^[A-Z][a-zA-Z0-9]*(View|Page|Component)$"
+      },
+      "message": "MVC classes should follow proper naming conventions"
+    },
+    {
+      "type": "Responsibility",
+      "rules": {
+        "controller": ["should handle request processing", "should not contain business logic", "should delegate to services"],
+        "model": ["should represent data", "should not contain UI logic", "should not directly reference controllers"],
+        "view": ["should display information", "should have minimal logic", "should not directly modify model data"]
+      },
+      "message": "Class responsibilities don't align with MVC pattern"
+    }
+  ],
+  "patternDetection": {
+    "mvcIndicators": [
+      "Controller",
+      "View",
+      "Model",
+      "HttpRequest",
+      "HttpResponse",
+      "ActionResult",
+      "Render"
+    ]
+  }
+}

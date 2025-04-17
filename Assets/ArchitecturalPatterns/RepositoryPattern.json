@@ -1,0 +1,44 @@
+{
+  "patternName": "RepositoryPattern",
+  "description": "Repository pattern for data access abstraction",
+  "severity": "Warning",
+  "rules": [
+    {
+      "type": "Structure",
+      "expectedPattern": "Repositories should provide data access abstraction",
+      "identifiers": {
+        "repository": ".*Repository$|.*Repo$",
+        "model": ".*Model$|.*Entity$|.*DTO$",
+        "dataAccess": ".*Context$|.*DbContext$|.*Connection$"
+      },
+      "message": "Repository classes should adhere to pattern structure"
+    },
+    {
+      "type": "Naming",
+      "pattern": {
+        "repository": "^I?[A-Z][a-zA-Z0-9]*Repository$",
+        "interface": "^I[A-Z][a-zA-Z0-9]*Repository$"
+      },
+      "message": "Repository classes should follow proper naming conventions"
+    },
+    {
+      "type": "Dependency",
+      "rules": {
+        "business": ["should not directly access data context", "should use repository interfaces"],
+        "repository": ["should depend on data context", "should not reference UI components"]
+      },
+      "message": "Class dependencies don't align with Repository pattern"
+    }
+  ],
+  "patternDetection": {
+    "repositoryIndicators": [
+      "Repository",
+      "DbSet",
+      "DbContext",
+      "Entity",
+      "CRUD",
+      "Query",
+      "Persist"
+    ]
+  }
+}

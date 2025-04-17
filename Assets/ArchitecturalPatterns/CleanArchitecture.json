@@ -1,0 +1,54 @@
+{
+  "patternName": "CleanArchitecture",
+  "description": "Clean Architecture principles for separation of concerns",
+  "severity": "Warning",
+  "rules": [
+    {
+      "type": "LayerDependency",
+      "layers": [
+        {
+          "name": "Entities",
+          "identifiers": [".*\\.Domain\\.", ".*\\.Entities\\.", ".*Entity$", ".*Model$"],
+          "allowedDependencies": []
+        },
+        {
+          "name": "UseCases",
+          "identifiers": [".*\\.Application\\.", ".*\\.UseCases\\.", ".*Service$", ".*Interactor$"],
+          "allowedDependencies": ["Entities"]
+        },
+        {
+          "name": "InterfaceAdapters",
+          "identifiers": [".*\\.Infrastructure\\.", ".*Controller$", ".*Presenter$", ".*Gateway$"],
+          "allowedDependencies": ["UseCases", "Entities"]
+        },
+        {
+          "name": "Frameworks",
+          "identifiers": [".*\\.Framework\\.", ".*\\.UI\\.", ".*\\.Database\\.", ".*Repository$"],
+          "allowedDependencies": ["InterfaceAdapters", "UseCases", "Entities"]
+        }
+      ],
+      "message": "Dependency direction violates Clean Architecture principles"
+    },
+    {
+      "type": "Structure",
+      "componentType": {
+        "entity": ["Should not have dependencies on other layers", "Should contain business rules"],
+        "useCase": ["Should contain application-specific business rules", "Should orchestrate entities"],
+        "adapter": ["Should convert data between use cases and external formats"],
+        "framework": ["Should communicate with external systems"]
+      },
+      "message": "Component doesn't fulfill its clean architecture responsibilities"
+    }
+  ],
+  "patternDetection": {
+    "cleanArchitectureIndicators": [
+      "Domain",
+      "UseCase",
+      "Entity",
+      "Repository",
+      "Service",
+      "Controller",
+      "Presenter"
+    ]
+  }
+}

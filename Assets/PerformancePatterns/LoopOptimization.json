@@ -1,0 +1,33 @@
+{
+  "patternName": "LoopOptimization",
+  "description": "Identifica loops ineficientes e sugere otimizações para melhorar o desempenho",
+  "severity": "Warning",
+  "rules": [
+    {
+      "type": "Algoritmo",
+      "name": "NestedLoops",
+      "pattern": "for\\s*\\([^\\)]+\\)\\s*{[^}]*for\\s*\\([^\\)]+\\)",
+      "complexity": "O(n²)",
+      "message": "Loops aninhados podem causar problemas de desempenho para grandes conjuntos de dados",
+      "suggestion": "Considere usar uma estrutura de dados indexada ou um algoritmo mais eficiente"
+    },
+    {
+      "type": "Algoritmo",
+      "name": "CollectionResizing",
+      "pattern": "new List<[^>]+>\\(\\)",
+      "message": "Inicialização de lista sem capacidade definida pode causar múltiplos redimensionamentos",
+      "suggestion": "Defina a capacidade inicial da lista quando o tamanho puder ser estimado: new List<T>(capacity)"
+    },
+    {
+      "type": "Algoritmo",
+      "name": "IneffectiveForEach",
+      "pattern": "foreach\\s*\\([^\\)]+\\)\\s*{[^}]*collection\\.(Add|Remove)",
+      "message": "Modificar a coleção durante iteração com foreach pode causar problemas de performance ou exceções",
+      "suggestion": "Use um loop for ou crie uma lista temporária para as modificações"
+    }
+  ],
+  "codeExamples": {
+    "good": "// Bom: Definir capacidade inicial\nvar list = new List<int>(100);\n\n// Bom: Usar estruturas de dados apropriadas\nvar lookup = new Dictionary<string, int>();\n\n// Bom: Evitar loops aninhados\nvar result = items.ToDictionary(x => x.Id, x => x.Value);",
+    "bad": "// Ruim: Múltiplos redimensionamentos\nvar list = new List<int>();\nfor(int i=0; i<1000; i++) { list.Add(i); }\n\n// Ruim: Loops aninhados ineficientes\nfor(int i=0; i<items.Count; i++) {\n  for(int j=0; j<items.Count; j++) {\n    // operação O(n²)\n  }\n}"
+  }
+}

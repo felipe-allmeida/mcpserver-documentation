@@ -1,0 +1,127 @@
+{
+  "patternName": "DomainDrivenDesign",
+  "description": "Estrutura para projetos que seguem a arquitetura Domain-Driven Design (DDD)",
+  "severity": "Warning",
+  "rules": [
+    {
+      "type": "FolderStructure",
+      "expectedFolders": [
+        "Domain", 
+        "Domain/Entities", 
+        "Domain/ValueObjects", 
+        "Domain/Repositories",
+        "Domain/Services",
+        "Domain/Events",
+        "Application",
+        "Application/Services",
+        "Application/DTOs",
+        "Infrastructure",
+        "Infrastructure/Repositories",
+        "Infrastructure/Data",
+        "WebApi"
+      ],
+      "message": "Projeto DDD deve seguir a estrutura de camadas recomendada",
+      "suggestion": "Adicione as pastas que estão faltando para seguir a arquitetura DDD"
+    },
+    {
+      "type": "FileLocation",
+      "filePatterns": {
+        "Entity\\.cs$": "Domain/Entities/",
+        "ValueObject\\.cs$": "Domain/ValueObjects/",
+        "IDomain.*Repository\\.cs$": "Domain/Repositories/",
+        "Domain.*Service\\.cs$": "Domain/Services/",
+        "Event\\.cs$": "Domain/Events/",
+        "Command\\.cs$|Query\\.cs$": "Application/Commands/",
+        "CommandHandler\\.cs$|QueryHandler\\.cs$": "Application/Handlers/",
+        "DTO\\.cs$": "Application/DTOs/",
+        "Application.*Service\\.cs$": "Application/Services/",
+        ".*Repository(Impl)?\\.cs$": "Infrastructure/Repositories/",
+        "DbContext\\.cs$": "Infrastructure/Data/",
+        "Controller\\.cs$": "WebApi/Controllers/"
+      },
+      "message": "Arquivos devem estar localizados nas pastas corretas de acordo com a arquitetura DDD",
+      "suggestion": "Mova o arquivo para o diretório apropriado para sua responsabilidade na arquitetura DDD"
+    },
+    {
+      "type": "Namespace",
+      "namespacePatterns": {
+        "Domain/Entities/": "^[A-Z][a-zA-Z0-9]*\\.Domain(\\.Entities)?$",
+        "Domain/ValueObjects/": "^[A-Z][a-zA-Z0-9]*\\.Domain\\.ValueObjects$",
+        "Domain/Repositories/": "^[A-Z][a-zA-Z0-9]*\\.Domain\\.Repositories$",
+        "Application/": "^[A-Z][a-zA-Z0-9]*\\.Application(\\..+)?$",
+        "Infrastructure/": "^[A-Z][a-zA-Z0-9]*\\.Infrastructure(\\..+)?$",
+        "WebApi/": "^[A-Z][a-zA-Z0-9]*\\.WebApi(\\..+)?$"
+      },
+      "message": "Os namespaces devem refletir a estrutura de camadas DDD",
+      "suggestion": "Ajuste o namespace para corresponder à camada e localização do arquivo"
+    },
+    {
+      "type": "DomainIntegrity",
+      "rules": [
+        {
+          "sourcePattern": "Domain/.*\\.cs$",
+          "forbiddenDependencies": ["Application", "Infrastructure", "WebApi"],
+          "message": "A camada de domínio não deve depender de outras camadas (dependência invertida)"
+        },
+        {
+          "sourcePattern": "Application/.*\\.cs$",
+          "forbiddenDependencies": ["Infrastructure", "WebApi"],
+          "message": "A camada de aplicação não deve depender da infraestrutura ou API Web"
+        },
+        {
+          "sourcePattern": "WebApi/.*\\.cs$",
+          "allowedDependencies": ["Application"],
+          "message": "A camada de API Web deve depender apenas da camada de aplicação"
+        }
+      ]
+    }
+  ],
+  "exemptionPatterns": [
+    "test/.*",
+    "obj/.*",
+    "bin/.*",
+    "Properties/.*"
+  ],
+  "examples": {
+    "goodStructure": [
+      "MyProject/",
+      "├── Domain/",
+      "│   ├── Entities/",
+      "│   │   └── Customer.cs",
+      "│   ├── ValueObjects/",
+      "│   │   └── Address.cs",
+      "│   ├── Repositories/",
+      "│   │   └── ICustomerRepository.cs",
+      "│   └── Services/",
+      "│       └── DomainCustomerService.cs",
+      "├── Application/",
+      "│   ├── DTOs/",
+      "│   │   └── CustomerDTO.cs",
+      "│   ├── Services/",
+      "│   │   └── CustomerAppService.cs",
+      "│   ├── Commands/",
+      "│   │   └── CreateCustomerCommand.cs",
+      "│   └── Handlers/",
+      "│       └── CreateCustomerCommandHandler.cs",
+      "├── Infrastructure/",
+      "│   ├── Data/",
+      "│   │   └── AppDbContext.cs",
+      "│   └── Repositories/",
+      "│       └── CustomerRepositoryImpl.cs",
+      "└── WebApi/",
+      "    └── Controllers/",
+      "        └── CustomerController.cs"
+    ],
+    "badStructure": [
+      "MyProject/",
+      "├── Models/",
+      "│   └── Customer.cs",
+      "├── Controllers/",
+      "│   └── CustomerController.cs",
+      "├── Data/",
+      "│   └── CustomerRepository.cs",
+      "└── Services/",
+      "    └── CustomerService.cs"
+    ]
+  }
+}

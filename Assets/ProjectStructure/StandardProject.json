@@ -1,0 +1,74 @@
+{
+  "patternName": "StandardProject",
+  "description": "Estrutura padrão para projetos .NET",
+  "severity": "Warning",
+  "rules": [
+    {
+      "type": "FolderStructure",
+      "expectedFolders": ["Models", "Controllers", "Services", "Repositories", "Views", "Utils"],
+      "message": "O projeto deve conter as pastas padrão para organização adequada do código",
+      "suggestion": "Crie as pastas que estão faltando para melhor organização do código"
+    },
+    {
+      "type": "FileLocation",
+      "filePatterns": {
+        "Controller\\.cs$": "Controllers/",
+        "Model\\.cs$|Entity\\.cs$|DTO\\.cs$": "Models/",
+        "Service\\.cs$": "Services/",
+        "Repository\\.cs$": "Repositories/",
+        "View\\.cs$|Page\\.cs$": "Views/"
+      },
+      "message": "Os arquivos devem ser organizados nas pastas apropriadas de acordo com sua função",
+      "suggestion": "Mova o arquivo para o diretório correto com base em seu tipo"
+    },
+    {
+      "type": "Namespace",
+      "namespacePattern": "^[A-Z][a-zA-Z0-9]*(\\.[A-Z][a-zA-Z0-9]*)*$",
+      "message": "Os namespaces devem seguir a convenção PascalCase e refletir a estrutura do projeto",
+      "suggestion": "Ajuste o namespace para seguir a convenção e refletir a estrutura do projeto"
+    },
+    {
+      "type": "FileNaming",
+      "filePatterns": {
+        "Controller$": ".*Controller\\.cs$",
+        "Service$": ".*Service\\.cs$",
+        "Repository$": ".*Repository\\.cs$",
+        "Model$": ".*Model\\.cs$|.*DTO\\.cs$|.*Entity\\.cs$"
+      },
+      "message": "Os nomes de arquivo devem seguir as convenções de nomenclatura padrão",
+      "suggestion": "Renomeie o arquivo para seguir a convenção PascalCase e incluir o sufixo adequado"
+    }
+  ],
+  "exemptionPatterns": [
+    "test/.*",
+    "obj/.*",
+    "bin/.*",
+    "Properties/.*"
+  ],
+  "examples": {
+    "goodStructure": [
+      "Project/",
+      "├── Controllers/",
+      "│   ├── HomeController.cs",
+      "│   └── UserController.cs",
+      "├── Models/",
+      "│   ├── UserModel.cs",
+      "│   └── ProductDTO.cs",
+      "├── Services/",
+      "│   ├── UserService.cs",
+      "│   └── AuthService.cs",
+      "├── Repositories/",
+      "│   └── UserRepository.cs",
+      "└── Views/",
+      "    ├── Home/",
+      "    └── User/"
+    ],
+    "badStructure": [
+      "Project/",
+      "├── HomeController.cs", 
+      "├── User.cs",
+      "├── UserService.cs",
+      "└── Views/"
+    ]
+  }
+}
